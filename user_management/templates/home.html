@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - Drive</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <style>
+        body {
+            background-color: #f0f2f5;
+            transition: background-color 0.5s, color 0.5s;
+        }
+
+        .dark-mode {
+            background-color: #343a40;
+            color: #ffffff;
+        }
+
+        .navbar {
+            background-color: #4285f4;
+            color: white;
+        }
+
+        .navbar a {
+            color: white !important;
+        }
+
+        .file-card,
+        .folder-card {
+            margin: 10px;
+            padding: 20px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .file-card:hover,
+        .folder-card:hover {
+            transform: scale(1.05);
+        }
+
+        .file-card {
+            background-color: #ffffff;
+            border: 1px solid #ced4da;
+        }
+
+        .folder-card {
+            background-color: #e9ecef;
+        }
+
+        .search-bar {
+            margin: 20px 0;
+        }
+
+        footer {
+            background-color: #343a40;
+            color: white;
+            padding: 10px 0;
+        }
+
+        .recent-header {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        .folder-header {
+            margin: 20px 0;
+            font-weight: bold;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .recent-header,
+            .folder-header {
+                text-align: center;
+            }
+        }
+
+        .add-button {
+            margin: 20px 0;
+            cursor: pointer;
+        }
+
+        .add-dropdown {
+            display: none;
+            position: absolute;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1000;
+            border-radius: 5px;
+        }
+
+        .add-dropdown button {
+            width: 100%;
+            margin-bottom: 5px;
+        }
+
+        .dropdown-toggle {
+            margin-top: 10px;
+        }
+
+        .profile-popup {
+            display: none;
+            position: absolute;
+            top: 50px;
+            right: 50px;
+            background-color: white;
+            border: 1px solid #ccc;
+            padding: 10px;
+            z-index: 1000;
+            width: 200px;
+        }
+
+        .dark-mode .profile-popup {
+            background-color: #1e1e1e;
+            border: 1px solid #444;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <a class="navbar-brand" href="#">Drive</a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" href="#" id="toggle-theme"><i class="fas fa-adjust"></i> Toggle Dark/Light</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'logout' %}">Logout</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" id="profileButton"><i class="fas fa-user-circle"></i> Profile</a>
+                    <div class="profile-popup" id="profilePopup">
+                        <h4>Profile Details</h4>
+                        <p>Username: {{ request.user.username }}</p>
+                        <p>Email: {{ request.user.email }}</p>
+                        <button class="btn btn-default" onclick="editProfile()">Edit Profile</button>
+                        <button class="btn btn-danger" onclick="closeProfile()">Close</button>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h2 class="text-center">Welcome to Your Drive</h2>
+
+        <div class="search-bar text-center">
+            <input type="text" class="form-control" placeholder="Search files and folders..." aria-label="Search">
+        </div>
+
+        <div class="add-button text-center">
+            <button class="btn btn-success dropdown-toggle" id="addDropdown" onclick="toggleAddDropdown()">+ New</button>
+            <div class="add-dropdown" id="addDropdownMenu">
+                <button class="btn btn-light">Upload File</button>
+                <button class="btn btn-light">Upload Folder</button>
+                <button class="btn btn-light">Create Folder</button>
+                <button class="btn btn-danger">Trash</button>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-md-4">
+                <h4 class="recent-header">Recently Accessed Files</h4>
+                <div class="row">
+                    {% for file in files %}
+                    <div class="col-md-12">
+                        <div class="file-card text-center">
+                            <i class="fas fa-file fa-3x"></i>
+                            <h5 class="card-title">{{ file.name }}</h5>
+                            <p>Type: {{ file.type }}</p>
+                            <p>Size: {{ file.size }}</p>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="col-md-8">
+                <h4 class="folder-header">Folders</h4>
+                <div class="row">
+                    {% for folder in folders %}
+                    <div class="col-md-6">
+                        <div class="folder-card text-center">
+                            <i class="fas fa-folder fa-3x"></i>
+                            <h5 class="card-title">{{ folder.name }}</h5>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="text-center">
+        <p>&copy; 2024 My Drive. All Rights Reserved.</p>
+    </footer>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#profileButton').click(function () {
+                $('#profilePopup').toggle();
+            });
+        });
+
+        $('#toggle-theme').click(function () {
+            $('body').toggleClass('dark-mode');
+        });
+
+        function closeProfile() {
+            $('#profilePopup').hide();
+        }
+
+        function editProfile() {
+            alert('Profile editing functionality not implemented yet.');
+        }
+
+        function toggleAddDropdown() {
+            $('#addDropdownMenu').toggle();
+        }
+
+        $(document).mouseup(function (e) {
+            var container = $("#addDropdownMenu");
+            if (!container.is(e.target) && container.has(e.target).length === 0) {
+                container.hide();
+            }
+        });
+    </script>
+</body>
+
+</html>
