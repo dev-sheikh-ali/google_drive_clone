@@ -1,10 +1,10 @@
 # Google Drive Clone
 
-#### Use `/login` to access the application and manage your files. Use `python manage.py createsuperuser` to create admin login details for managing users.
+### Google drive application clone made with Django
 
-## DEMO: [Google Drive Clone]()
+### DEMO: [Google Drive Clone]()
 
-<kbd><img src="image" /></kbd>
+<kbd><img src="./admin.png" /></kbd>
 
 ## Tech Stack
 - **Backend:** Django
