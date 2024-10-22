@@ -16,57 +16,82 @@
 
 ## Project Structure
 ```
-google_drive_clone/
-    ├── drive_clone/
-    │   ├── __init__.py
-    │   ├── settings.py
-    │   ├── urls.py
-    │   ├── asgi.py
-    │   ├── wsgi.py
-    ├── user_management/
-    │   ├── migrations/
-    │   ├── templates/
-    │   │   └── user_management/
-    │   │       ├── signup.html
-    │   │       ├── login.html
-    │   │       ├── profile.html
-    │   ├── static/
-    │   ├── admin.py
-    │   ├── apps.py
-    │   ├── models.py
-    │   ├── views.py
-    │   ├── forms.py
-    │   ├── urls.py
-    ├── folder_management/
-    │   ├── migrations/
-    │   ├── templates/
-    │   │   └── folder_management/
-    │   │       ├── folder_list.html
-    │   │       ├── create_folder.html
-    │   │       ├── folder_detail.html
-    │   ├── static/
-    │   ├── admin.py
-    │   ├── apps.py
-    │   ├── models.py
-    │   ├── views.py
-    │   ├── urls.py
-    ├── file_management/
-    │   ├── migrations/
-    │   ├── templates/
-    │   │   └── file_management/
-    │   │       ├── upload_file.html
-    │   │       ├── file_list.html
-    │   │       ├── file_detail.html
-    │   ├── static/
-    │   ├── admin.py
-    │   ├── apps.py
-    │   ├── models.py
-    │   ├── views.py
-    │   ├── urls.py
-    ├── media/  
-    ├── uploads/  # Directory for uploaded files
-    ├── manage.py
-    └── env/  # Virtual environment
+sheikh@sheikh:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ ls
+db.sqlite3  file_management    google_drive_clone  README.md
+env         folder_management  manage.py           user_management
+sheikh@sheikh:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ for dir in ./user_management ./file_management ./folder_management; do   tree "$dir"; done
+./user_management
+├── admin.py
+├── apps.py
+├── forms.py
+├── __init__.py
+├── migrations
+│   ├── 0001_initial.py
+│   ├── __init__.py
+│   └── __pycache__
+│       ├── 0001_initial.cpython-310.pyc
+│       └── __init__.cpython-310.pyc
+├── models.py
+├── __pycache__
+│   ├── admin.cpython-310.pyc
+│   ├── apps.cpython-310.pyc
+│   ├── forms.cpython-310.pyc
+│   ├── __init__.cpython-310.pyc
+│   ├── models.cpython-310.pyc
+│   ├── urls.cpython-310.pyc
+│   └── views.cpython-310.pyc
+├── templates
+│   ├── home.html
+│   └── user_management
+│       ├── login.html
+│       ├── password_reset_complete.html
+│       ├── password_reset_confirm.html
+│       ├── password_reset_done.html
+│       ├── password_reset_form.html
+│       ├── profile.html
+│       └── signup.html
+├── tests.py
+├── urls.py
+└── views.py
+
+5 directories, 27 files
+./file_management
+├── admin.py
+├── apps.py
+├── __init__.py
+├── migrations
+│   ├── __init__.py
+│   └── __pycache__
+│       └── __init__.cpython-310.pyc
+├── models.py
+├── __pycache__
+│   ├── admin.cpython-310.pyc
+│   ├── apps.cpython-310.pyc
+│   ├── __init__.cpython-310.pyc
+│   └── models.cpython-310.pyc
+├── tests.py
+└── views.py
+
+3 directories, 12 files
+./folder_management
+├── admin.py
+├── apps.py
+├── __init__.py
+├── migrations
+│   ├── __init__.py
+│   └── __pycache__
+│       └── __init__.cpython-310.pyc
+├── models.py
+├── __pycache__
+│   ├── admin.cpython-310.pyc
+│   ├── apps.cpython-310.pyc
+│   ├── __init__.cpython-310.pyc
+│   └── models.cpython-310.pyc
+├── tests.py
+└── views.py
+
+3 directories, 12 files
+
     
 ```
 
