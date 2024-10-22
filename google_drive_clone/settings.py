@@ -31,6 +31,7 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'jazzmin',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -130,4 +131,4 @@ AUTH_USER_MODEL = 'user_management.CustomUser'
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For testing, this prints emails to the console
 # settings.py
 
-LOGIN_URL = '/user/login/'  # Redirect to your custom login view
+LOGIN_URL = 'login/'  # Redirect to your custom login view

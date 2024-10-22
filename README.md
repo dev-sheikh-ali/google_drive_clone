@@ -12,6 +12,7 @@
 - **Database:** SQLite (default), can be configured to use PostgreSQL or MySQL
 - **Authentication:** Custom User Model
 - **Libraries:** Font Awesome for icons, jQuery for interactivity
+- **Django-Jazzmin:** template for django admin `https://django-jazzmin.readthedocs.io/`
 
 ## Project Structure
 ```
@@ -119,7 +120,7 @@ python manage.py runserver
 ```
 
 ### Step 9: Access the application
-Open your browser and go to `http://127.0.0.1:8000/user/signup` to create a new account or `http://127.0.0.1:8000/user/login` to log in.
+Open your browser and go to `http://127.0.0.1:8000/signup` to create a new account or `http://127.0.0.1:8000/login` to log in.
 
 ## Features
 - User registration and authentication

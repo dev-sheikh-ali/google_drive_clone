@@ -43,8 +43,8 @@ def signup(request):
             errors.append("A user with this email already exists.")
         if password1 != password2:
             errors.append("Passwords do not match.")
-        if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$', password1):
-            errors.append("Password must be at least 8 characters long and contain both letters and numbers.")
+        # if not re.match(r'^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$', password1):
+        #     errors.append("Password must be at least 8 characters long and contain both letters and numbers.")
 
         # If there are errors, show them to the user
         if errors:
