@@ -16,81 +16,89 @@
 
 ## Project Structure
 ```
-sheikh@sheikh:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ ls
-db.sqlite3  file_management    google_drive_clone  README.md
-env         folder_management  manage.py           user_management
-sheikh@sheikh:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ for dir in ./user_management ./file_management ./folder_management; do   tree "$dir"; done
-./user_management
-├── admin.py
-├── apps.py
-├── forms.py
-├── __init__.py
-├── migrations
-│   ├── 0001_initial.py
+user@user:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ tree -I 'env'
+.
+├── db.sqlite3 //db file
+├── file_management //file management app
+│   ├── admin.py
+│   ├── apps.py
 │   ├── __init__.py
-│   └── __pycache__
-│       ├── 0001_initial.cpython-310.pyc
-│       └── __init__.cpython-310.pyc
-├── models.py
-├── __pycache__
-│   ├── admin.cpython-310.pyc
-│   ├── apps.cpython-310.pyc
-│   ├── forms.cpython-310.pyc
-│   ├── __init__.cpython-310.pyc
-│   ├── models.cpython-310.pyc
-│   ├── urls.cpython-310.pyc
-│   └── views.cpython-310.pyc
-├── templates
-│   ├── home.html
-│   └── user_management
-│       ├── login.html
-│       ├── password_reset_complete.html
-│       ├── password_reset_confirm.html
-│       ├── password_reset_done.html
-│       ├── password_reset_form.html
-│       ├── profile.html
-│       └── signup.html
-├── tests.py
-├── urls.py
-└── views.py
-
-5 directories, 27 files
-./file_management
-├── admin.py
-├── apps.py
-├── __init__.py
-├── migrations
+│   ├── migrations
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       └── __init__.cpython-310.pyc
+│   ├── models.py
+│   ├── __pycache__
+│   │   ├── admin.cpython-310.pyc
+│   │   ├── apps.cpython-310.pyc
+│   │   ├── __init__.cpython-310.pyc
+│   │   └── models.cpython-310.pyc
+│   ├── tests.py
+│   └── views.py
+├── folder_management //folder management app
+│   ├── admin.py
+│   ├── apps.py
 │   ├── __init__.py
-│   └── __pycache__
-│       └── __init__.cpython-310.pyc
-├── models.py
-├── __pycache__
-│   ├── admin.cpython-310.pyc
-│   ├── apps.cpython-310.pyc
-│   ├── __init__.cpython-310.pyc
-│   └── models.cpython-310.pyc
-├── tests.py
-└── views.py
-
-3 directories, 12 files
-./folder_management
-├── admin.py
-├── apps.py
-├── __init__.py
-├── migrations
+│   ├── migrations
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       └── __init__.cpython-310.pyc
+│   ├── models.py
+│   ├── __pycache__
+│   │   ├── admin.cpython-310.pyc
+│   │   ├── apps.cpython-310.pyc
+│   │   ├── __init__.cpython-310.pyc
+│   │   └── models.cpython-310.pyc
+│   ├── tests.py
+│   └── views.py
+├── google_drive_clone //manage the whole site from here
+│   ├── asgi.py
 │   ├── __init__.py
-│   └── __pycache__
-│       └── __init__.cpython-310.pyc
-├── models.py
-├── __pycache__
-│   ├── admin.cpython-310.pyc
-│   ├── apps.cpython-310.pyc
-│   ├── __init__.cpython-310.pyc
-│   └── models.cpython-310.pyc
-├── tests.py
-└── views.py
+│   ├── __pycache__
+│   │   ├── __init__.cpython-310.pyc
+│   │   ├── settings.cpython-310.pyc
+│   │   ├── urls.cpython-310.pyc
+│   │   └── wsgi.cpython-310.pyc
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── README.md
+└── user_management //user management app
+    ├── admin.py
+    ├── apps.py
+    ├── forms.py
+    ├── __init__.py
+    ├── migrations
+    │   ├── 0001_initial.py
+    │   ├── __init__.py
+    │   └── __pycache__
+    │       ├── 0001_initial.cpython-310.pyc
+    │       └── __init__.cpython-310.pyc
+    ├── models.py
+    ├── __pycache__
+    │   ├── admin.cpython-310.pyc
+    │   ├── apps.cpython-310.pyc
+    │   ├── forms.cpython-310.pyc
+    │   ├── __init__.cpython-310.pyc
+    │   ├── models.cpython-310.pyc
+    │   ├── urls.cpython-310.pyc
+    │   └── views.cpython-310.pyc
+    ├── templates
+    │   ├── home.html
+    │   └── user_management
+    │       ├── login.html
+    │       ├── password_reset_complete.html
+    │       ├── password_reset_confirm.html
+    │       ├── password_reset_done.html
+    │       ├── password_reset_form.html
+    │       ├── profile.html
+    │       └── signup.html
+    ├── tests.py
+    ├── urls.py
+    └── views.py
 
-3 directories, 12 files
+16 directories, 63 files
 
     
 ```
