@@ -26,7 +26,7 @@
 ## Tech Stack
 - **Backend:** Django
 - **Frontend:** HTML, CSS, Bootstrap
-- **Database:** SQLite (default), can be configured to use PostgreSQL or MySQL
+- **Database:** SQLite (default)
 - **Authentication:** Custom User Model
 - **Libraries:** Font Awesome for icons, jQuery for interactivity
 - **Django-Jazzmin:** template for django admin `https://django-jazzmin.readthedocs.io/`
@@ -200,8 +200,9 @@ python manage.py runserver
 Open your browser and go to `http://127.0.0.1:8000/signup` to create a new account or `http://127.0.0.1:8000/login` to log in.
 
 ## Features
-- User registration and authentication
-- File and folder management
+- Authentication and account creation with login and password
+- Browse folders on a web UI
+- Create , edit , delete , copy and move folders
 - Dark and light mode toggle
 - Profile management
 

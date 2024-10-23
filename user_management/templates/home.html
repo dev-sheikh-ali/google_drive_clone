@@ -22,38 +22,57 @@
         .navbar {
             background-color: #4285f4;
             color: white;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
         }
 
         .navbar a {
             color: white !important;
         }
 
-        .folder-card {
-            margin: 10px;
+        .sidebar {
+            height: 100vh;
+            position: fixed;
+            top: 56px;
+            left: 0;
+            padding-top: 20px;
+            background-color: #ffffff;
+            width: 220px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        .sidebar a {
+            padding: 10px 20px;
+            display: block;
+            color: #333;
+            text-decoration: none;
+        }
+
+        .sidebar a:hover {
+            background-color: #f0f0f0;
+        }
+
+        .create-folder-btn {
+            padding: 10px 20px;
+            display: block;
+            text-align: center;
+        }
+
+        .content-wrapper {
+            margin-left: 220px;
             padding: 20px;
-            border-radius: 10px;
-            transition: transform 0.2s;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            background-color: #e9ecef;
-            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
         }
 
-        .folder-card:hover {
-            transform: scale(1.05);
+        .content {
+            flex: 1;
         }
 
-        .folder-actions {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-        }
-
-        .search-bar {
-            margin: 20px 0;
-        }
-
-        .add-button {
-            margin: 20px 0;
+        .recently-opened {
+            width: 300px;
         }
 
         .profile-popup {
@@ -72,13 +91,47 @@
             background-color: #1e1e1e;
             border: 1px solid #444;
         }
+
+        .folder-card {
+            padding: 15px;
+            border-radius: 10px;
+            transition: transform 0.2s;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            background-color: #e9ecef;
+            position: relative;
+            width: 150px;
+        }
+
+        .folder-card:hover {
+            transform: scale(1.05);
+        }
+
+        .folder-actions {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+        }
+
+        .folder-icon {
+            font-size: 2.5rem;
+        }
+
+        .recent-file {
+            margin-bottom: 15px;
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            background-color: #ffffff;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
     </style>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-light">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Drive</a>
+            <a class="navbar-brand ms-2" href="#"><i class="fas fa-cloud"></i> Drive</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -106,36 +159,50 @@
         </div>
     </nav>
 
-    <div class="container mt-5">
-        <h2 class="text-center">Welcome to Your Drive</h2>
-
-        <div class="search-bar text-center">
-            <input type="text" class="form-control" placeholder="Search files and folders..." aria-label="Search">
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <button class="btn btn-success create-folder-btn" data-bs-toggle="modal" data-bs-target="#createFolderModal">+ Create Folder</button>
+        <a href="{% url 'list_folders' %}"><i class="fas fa-home"></i> Home</a>
+        <a href="#"><i class="fas fa-folder"></i> My Drive</a>
+        <a href="#"><i class="fas fa-desktop"></i> Computers</a>
+        <a href="#"><i class="fas fa-users"></i> Shared with Me</a>
+        <a href="#"><i class="fas fa-clock"></i> Recent</a>
+        <a href="#"><i class="fas fa-star"></i> Starred</a>
+        <a href="#"><i class="fas fa-trash"></i> Trash</a>
+        <hr>
+        <div class="text-center">
+            <p><strong>Storage (92% full)</strong></p>
+            <p>13.95 GB of 15 GB used</p>
+            <button class="btn btn-link">Get more storage</button>
         </div>
+    </div>
 
-        <div class="add-button text-center">
-            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#createFolderModal">+ Create Folder</button>
-        </div>
+    <div class="content-wrapper">
+        <div class="content">
+            <div class="container-fluid">
+                <h2>Welcome to Your Drive</h2>
 
-        <!-- Breadcrumb Navigation -->
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="{% url 'list_folders' %}">Home</a></li>
-                {% for breadcrumb in breadcrumbs %}
-                    <li class="breadcrumb-item"><a href="{% url 'list_folders_nested' breadcrumb.id %}">{{ breadcrumb.name }}</a></li>
-                {% endfor %}
-            </ol>
-        </nav>
+                <div class="search-bar mb-3">
+                    <input type="text" class="form-control" placeholder="Search files and folders..." aria-label="Search">
+                </div>
 
-        <div class="row">
-            <div class="col-md-8 offset-md-2">
-                <h4 class="folder-header">Your Folders</h4>
+                <!-- Breadcrumb Navigation -->
+                <nav aria-label="breadcrumb">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="{% url 'list_folders' %}"><i class="fas fa-home"></i> Home</a></li>
+                        {% for breadcrumb in breadcrumbs %}
+                        <li class="breadcrumb-item"><a href="{% url 'list_folders_nested' breadcrumb.id %}">{{ breadcrumb.name }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </nav>
+
                 <div class="row">
-                    {% for folder in folders %}
-                    <div class="col-md-6">
-                        <div class="folder-card text-center">
+                    <h4>Your Folders</h4>
+                    <div class="d-flex flex-wrap">
+                        {% for folder in folders %}
+                        <div class="folder-card text-center me-3 mb-3">
                             <a href="{% url 'list_folders_nested' folder.id %}" class="folder-link">
-                                <i class="fas fa-folder fa-3x"></i>
+                                <i class="fas fa-folder folder-icon"></i>
                                 <h5 class="card-title">{{ folder.name }}</h5>
                             </a>
 
@@ -153,16 +220,27 @@
                                 </ul>
                             </div>
                         </div>
+                        <!-- Include modals for each operation -->
+                        {% include "folder_management/edit_folder_modal.html" %}
+                        {% include "folder_management/delete_folder_modal.html" %}
+                        {% include "folder_management/move_folder_modal.html" %}
+                        {% include "folder_management/copy_folder_modal.html" %}
+                        {% include "folder_management/create_subfolder_modal.html" %}
+                        {% endfor %}
                     </div>
-                    <!-- Include modals for each operation -->
-                    {% include "folder_management/edit_folder_modal.html" %}
-                    {% include "folder_management/delete_folder_modal.html" %}
-                    {% include "folder_management/move_folder_modal.html" %}
-                    {% include "folder_management/copy_folder_modal.html" %}
-                    {% include "folder_management/create_subfolder_modal.html" %}
-                    {% endfor %}
                 </div>
             </div>
+        </div>
+
+        <!-- Recently Opened Files -->
+        <div class="recently-opened">
+            <h4>Recently Opened Files</h4>
+            {% for file in recent_files %}
+            <div class="recent-file">
+                <span>{{ file.name }}</span>
+                <span><i class="fas fa-file"></i></span>
+            </div>
+            {% endfor %}
         </div>
     </div>
 
@@ -180,22 +258,6 @@
 
             $('#toggle-theme').click(function () {
                 $('body').toggleClass('dark-mode');
-            });
-
-            // Close modals on successful operations
-            function closeModal(modalId) {
-                $(modalId).modal('hide');
-            }
-
-            // Assuming a form submission will trigger these actions
-            // Attach to the move, copy, edit forms as needed
-            $('form.move-folder-form, form.copy-folder-form, form.edit-folder-form').submit(function (event) {
-                event.preventDefault(); // Prevent the default form submission
-                // Perform your AJAX or necessary action here
-
-                // Assuming it's successful, close the modal
-                const modalId = '#' + $(this).closest('.modal').attr('id');
-                closeModal(modalId);
             });
         });
 
