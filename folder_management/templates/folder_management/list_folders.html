@@ -1,0 +1,53 @@
+<!-- folder_management/templates/folder_management/list_folders.html -->
+{% extends "home.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2 class="text-center">Folders</h2>
+
+    <!-- Breadcrumb navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'list_folders' %}">Home</a></li>
+            {% for ancestor in breadcrumbs %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'list_folders_nested' ancestor.id %}">{{ ancestor.name }}</a>
+                </li>
+            {% endfor %}
+            {% if parent_folder %}
+                <li class="breadcrumb-item active" aria-current="page">{{ parent_folder.name }}</li>
+            {% endif %}
+        </ol>
+    </nav>
+
+    <!-- Add Folder Button -->
+    <div class="text-right mb-3">
+        <button class="btn btn-primary" data-toggle="modal" data-target="#createFolderModal">+ Create Folder</button>
+    </div>
+
+    <!-- Folder List -->
+    <div class="row">
+        {% for folder in folders %}
+            <div class="col-md-4">
+                <div class="folder-card text-center">
+                    <i class="fas fa-folder fa-3x"></i>
+                    <h5>{{ folder.name }}</h5>
+                    <div class="mt-2">
+                        <a class="btn btn-primary btn-sm" href="{% url 'list_folders_nested' folder.id %}">Open</a>
+                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#moveFolderModal{{ folder.id }}">Move</button>
+                        <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#copyFolderModal{{ folder.id }}">Copy</button>
+                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteFolderModal{{ folder.id }}">Delete</button>
+                    </div>
+                </div>
+            </div>
+            <!-- Include move, copy, delete modals -->
+            {% include "folder_management/move_folder_modal.html" %}
+            {% include "folder_management/copy_folder_modal.html" %}
+            {% include "folder_management/delete_folder_modal.html" %}
+        {% endfor %}
+    </div>
+</div>
+
+<!-- Include the Create Folder Modal -->
+{% include "folder_management/create_folder_modal.html" %}
+{% endblock %}

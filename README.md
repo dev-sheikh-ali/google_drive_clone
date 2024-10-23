@@ -4,7 +4,24 @@
 
 ### DEMO: [Google Drive Clone]()
 
-<kbd><img src="./admin.png" /></kbd>
+<table width="100%"> 
+<tr>
+<td width="50%">      
+&nbsp; 
+<br>
+<p align="center">
+  ADMIN
+</p>
+<kbd><img src="./images/admin.png" /></kbd>
+</td> 
+<td width="50%">
+<br>
+<p align="center">
+  CLIENT
+</p>
+<img src="./images/drive.png">  
+</td>
+</table>
 
 ## Tech Stack
 - **Backend:** Django
@@ -18,8 +35,8 @@
 ```
 user@user:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ tree -I 'env'
 .
-├── db.sqlite3 //db file
-├── file_management //file management app
+├── db.sqlite3
+├── file_management
 │   ├── admin.py
 │   ├── apps.py
 │   ├── __init__.py
@@ -35,23 +52,47 @@ user@user:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clon
 │   │   └── models.cpython-310.pyc
 │   ├── tests.py
 │   └── views.py
-├── folder_management //folder management app
+├── folder_management
 │   ├── admin.py
 │   ├── apps.py
 │   ├── __init__.py
 │   ├── migrations
+│   │   ├── 0001_initial.py
+│   │   ├── 0002_alter_folder_name_alter_folder_unique_together.py
+│   │   ├── 0003_alter_folder_unique_together_alter_folder_name.py
 │   │   ├── __init__.py
 │   │   └── __pycache__
+│   │       ├── 0001_initial.cpython-310.pyc
+│   │       ├── 0002_alter_folder_name_alter_folder_unique_together.cpython-310.pyc
+│   │       ├── 0003_alter_folder_unique_together_alter_folder_name.cpython-310.pyc
 │   │       └── __init__.cpython-310.pyc
 │   ├── models.py
 │   ├── __pycache__
 │   │   ├── admin.cpython-310.pyc
 │   │   ├── apps.cpython-310.pyc
 │   │   ├── __init__.cpython-310.pyc
-│   │   └── models.cpython-310.pyc
+│   │   ├── models.cpython-310.pyc
+│   │   ├── urls.cpython-310.pyc
+│   │   └── views.cpython-310.pyc
+│   ├── templates
+│   │   └── folder_management
+│   │       ├── copy_folder_modal.html
+│   │       ├── create_folder_modal.html
+│   │       ├── create_subfolder_modal.html
+│   │       ├── delete_folder_modal.html
+│   │       ├── edit_folder_modal.html
+│   │       ├── list_folders.html
+│   │       └── move_folder_modal.html
+│   ├── templatetags
+│   │   ├── folder_tags.py
+│   │   ├── __init__.py
+│   │   └── __pycache__
+│   │       ├── folder_tags.cpython-310.pyc
+│   │       └── __init__.cpython-310.pyc
 │   ├── tests.py
+│   ├── urls.py
 │   └── views.py
-├── google_drive_clone //manage the whole site from here
+├── google_drive_clone
 │   ├── asgi.py
 │   ├── __init__.py
 │   ├── __pycache__
@@ -62,9 +103,12 @@ user@user:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clon
 │   ├── settings.py
 │   ├── urls.py
 │   └── wsgi.py
+├── images
+│   ├── admin.png
+│   └── drive.png
 ├── manage.py
 ├── README.md
-└── user_management //user management app
+└── user_management
     ├── admin.py
     ├── apps.py
     ├── forms.py
@@ -98,8 +142,8 @@ user@user:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clon
     ├── urls.py
     └── views.py
 
-16 directories, 63 files
-
+21 directories, 85 files
+sheikh@sheikh:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ 
     
 ```
 

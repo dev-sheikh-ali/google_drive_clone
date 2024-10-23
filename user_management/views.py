@@ -6,26 +6,16 @@ from django.contrib.auth.hashers import make_password
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 from django.http import JsonResponse
+from folder_management.models import Folder
 import re
 
 @login_required
 def home(request):
-    # Dummy data for files and folders
-    files = [
-        {'name': 'Document1.pdf', 'type': 'pdf', 'size': '1.2MB'},
-        {'name': 'Image1.jpg', 'type': 'image', 'size': '500KB'},
-        {'name': 'Presentation.pptx', 'type': 'ppt', 'size': '2.4MB'},
-        {'name': 'Spreadsheet.xlsx', 'type': 'excel', 'size': '800KB'},
-    ]
-    
-    folders = [
-        {'name': 'Projects', 'icon': 'folder'},
-        {'name': 'Photos', 'icon': 'folder'},
-        {'name': 'Music', 'icon': 'folder'},
-        {'name': 'Documents', 'icon': 'folder'},
-    ]
+    # Retrieve folders owned by the user
+    folders = Folder.objects.filter(owner=request.user)
+    files = []  # Placeholder for file retrieval logic
 
-    return render(request, 'home.html', {'files': files, 'folders': folders})
+    return render(request, 'home.html', {'folders': folders, 'files': files})
 
 def signup(request):
     if request.method == 'POST':
