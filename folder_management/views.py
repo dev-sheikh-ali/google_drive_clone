@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Folder
+from django.http import JsonResponse
 
 @login_required
 def list_folders(request, parent_id=None):
@@ -131,28 +132,36 @@ def move_folder(request, folder_id):
 
     if request.method == 'POST':
         new_parent_id = request.POST.get('new_parent_id')
-        new_parent = get_object_or_404(Folder, id=new_parent_id, owner=request.user)
+        if new_parent_id:
+            new_parent = get_object_or_404(Folder, id=new_parent_id, owner=request.user)
 
-        # Ensure that the selected new parent is not a descendant of the folder being moved
-        if not is_child_folder(folder, new_parent):
-            # Check for duplicate names and append numbers if needed
-            original_name = folder.name
-            counter = 1
-            name = original_name
-            while Folder.objects.filter(name=name, owner=request.user, parent=new_parent).exists():
-                name = f"{original_name} ({counter})"
-                counter += 1
-            folder.name = name
-            folder.parent = new_parent
-            folder.save()
-            messages.success(request, "Folder moved successfully!")
-        else:
-            messages.error(request, "Invalid operation. Cannot move a folder into its own child or itself.")
+            # Ensure the selected new parent is not a descendant of the folder being moved
+            if not is_child_folder(folder, new_parent):
+                # Check for duplicate names and append numbers if needed
+                original_name = folder.name
+                counter = 1
+                name = original_name
+                while Folder.objects.filter(name=name, owner=request.user, parent=new_parent).exists():
+                    name = f"{original_name} ({counter})"
+                    counter += 1
+                folder.name = name
+                folder.parent = new_parent
+                folder.save()
+                messages.success(request, "Folder moved successfully!")
+            else:
+                messages.error(request, "Invalid operation. Cannot move a folder into its own child or itself.")
 
-        return redirect('list_folders_nested', parent_id=new_parent.id if new_parent else None)
+        return redirect('list_folders_nested', parent_id=new_parent_id)
 
+    # Retrieve all folders owned by the user except for the current folder and its descendants
     all_folders = Folder.objects.filter(owner=request.user).exclude(id=folder.id)
-    return render(request, 'folder_management/move_folder.html', {'folder': folder, 'all_folders': all_folders})
+    valid_folders = [f for f in all_folders if not is_child_folder(folder, f)]
+
+    return render(request, 'folder_management/move_folder_modal.html', {
+        'folder': folder,
+        'all_folders': valid_folders,
+    })
+
 
 @login_required
 def copy_folder(request, folder_id):
@@ -192,6 +201,7 @@ def copy_folder(request, folder_id):
 
 # Helper function to check if new_parent is a child of folder
 def is_child_folder(folder, new_parent):
+    """Checks if the new parent is a child of the given folder."""
     current = new_parent
     while current:
         if current == folder:

@@ -1,12 +1,10 @@
 <!-- folder_management/templates/folder_management/edit_folder_modal.html -->
-<div class="modal fade" id="editFolderModal{{ folder.id }}" tabindex="-1" role="dialog" aria-labelledby="editFolderModalLabel{{ folder.id }}" aria-hidden="true">
+<div class="modal fade" id="editFolderModal{{ folder.id }}" tabindex="-1" aria-labelledby="editFolderModalLabel{{ folder.id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="editFolderModalLabel{{ folder.id }}">Edit Folder</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method="POST" action="{% url 'update_folder' folder.id %}">

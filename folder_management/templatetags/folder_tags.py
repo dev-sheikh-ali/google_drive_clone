@@ -1,3 +1,4 @@
+# folder_management/templatetags/folder_tags.py
 from django import template
 from folder_management.models import Folder
 

@@ -1,19 +1,19 @@
 {% load folder_tags %}
+
 <div class="modal fade" id="moveFolderModal{{ folder.id }}" tabindex="-1" role="dialog" aria-labelledby="moveFolderModalLabel{{ folder.id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="moveFolderModalLabel{{ folder.id }}">Move Folder</h5>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form method="POST" action="{% url 'move_folder' folder.id %}">
                     {% csrf_token %}
                     <div class="form-group">
-                        <label for="newParentId">Select New Parent Folder</label>
-                        <select class="form-control" name="new_parent_id" required>
+                        <label for="newParentId{{ folder.id }}">Select New Parent Folder</label>
+                        <select class="form-control" id="newParentId{{ folder.id }}" name="new_parent_id" required>
+                            <option value="" disabled selected>Select a folder</option>
                             {% for target_folder in all_folders %}
                                 {% if not folder|is_descendant:target_folder and folder.id != target_folder.id %}
                                     <option value="{{ target_folder.id }}">{{ target_folder.get_full_path }}</option>
@@ -21,7 +21,7 @@
                             {% endfor %}
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-primary">Move Folder</button>
+                    <button type="submit" class="btn btn-primary mt-3">Move Folder</button>
                 </form>
             </div>
         </div>
