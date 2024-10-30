@@ -32,15 +32,23 @@ def upload_file(request, parent_id=None):
             return JsonResponse({"error": "Invalid form submission"}, status=400)
 
     return JsonResponse({"error": "Invalid request method"}, status=400)
+
 @login_required
 def delete_file(request, file_id):
     file = get_object_or_404(File, id=file_id, owner=request.user)
+    parent_id = file.parent_folder.id if file.parent_folder else None  # Get parent folder ID
+
     file_path = file.file.path
     if os.path.exists(file_path):
-        os.remove(file_path)
+        os.remove(file_path)  # Delete the file from the server directory
+
     file.delete()
     messages.success(request, "File deleted successfully!")
-    return redirect('list_folders', parent_id=file.parent_folder.id if file.parent_folder else None)
+
+    # Redirect based on the presence of a parent folder
+    if parent_id:
+        return redirect('list_folders_nested', parent_id=parent_id)
+    return redirect('list_folders')
 
 @login_required
 def list_folders(request, parent_id=None):

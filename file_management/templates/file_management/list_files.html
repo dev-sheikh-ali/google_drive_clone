@@ -11,42 +11,39 @@
         <div class="file-card text-center me-3 mb-3">
             <a href="{{ file.file.url }}" target="_blank">
                 {% if file.extension == '.png' or file.extension == '.jpg' or file.extension == '.jpeg' %}
-                    <i class="fas fa-file-image file-icon"></i>
+                    <i class="fas fa-file-image file-icon fa-3x"></i>
                 {% elif file.extension == '.pdf' %}
-                    <i class="fas fa-file-pdf file-icon"></i>
+                    <i class="fas fa-file-pdf file-icon fa-3x"></i>
                 {% elif file.extension == '.doc' or file.extension == '.docx' %}
-                    <i class="fas fa-file-word file-icon"></i>
+                    <i class="fas fa-file-word file-icon fa-3x"></i>
                 {% elif file.extension == '.txt' %}
-                    <i class="fas fa-file-alt file-icon"></i>
+                    <i class="fas fa-file-alt file-icon fa-3x"></i>
                 {% else %}
-                    <i class="fas fa-file file-icon"></i>
+                    <i class="fas fa-file file-icon fa-3x"></i>
                 {% endif %}
                 <h5 class="card-title">{{ file.name }}</h5>
             </a>
             <p>Size: {{ file.size }} bytes</p>
             <p>Last modified: {{ file.updated_at }}</p>
+
+            <!-- Three-dots dropdown -->
+            <div class="dropdown file-actions">
+                <button class="btn btn-light dropdown-toggle" type="button" id="fileActions{{ file.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fas fa-ellipsis-v"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="fileActions{{ file.id }}">
+                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteFileModal{{ file.id }}">Delete</a></li>
+                    <li><a class="dropdown-item" href="#">Copy</a></li>
+                    <li><a class="dropdown-item" href="#">Move</a></li>
+                </ul>
+            </div>
         </div>
+
+        <!-- Include delete modal for each file -->
+        {% include "file_management/delete_file_modal.html" with file=file %}
+        
         {% empty %}
         <p>No files available in this folder.</p>
         {% endfor %}
     </div>
 </div>
-
-<script>
-    $(document).ready(function () {
-        function reloadFiles() {
-            const parent_id = "{{ parent_folder.id|default:0 }}";
-            if (parent_id) {
-                $.ajax({
-                    url: "{% url 'list_files' parent_id=0 %}".replace("0", parent_id),
-                    success: function (data) {
-                        $('.file-list-container').html(data);
-                    },
-                    error: function () {
-                        alert("Failed to load files.");
-                    }
-                });
-            }
-        }
-    });
-</script>
