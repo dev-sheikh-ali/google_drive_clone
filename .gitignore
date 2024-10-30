@@ -1,0 +1,25 @@
+# Ignore server directory
+/server/
+
+# Ignore Python cache files
+__pycache__/
+*.py[cod]
+
+# Ignore environment files
+.env
+.env.*
+
+# Ignore virtual environment directory
+venv/
+env/
+
+# Ignore database files
+*.sqlite3
+
+# Ignore compiled code
+*.pyc
+*.pyo
+
+# Ignore editor files (optional)
+.vscode/
+.idea/
