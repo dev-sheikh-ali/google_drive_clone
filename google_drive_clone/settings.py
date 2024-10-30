@@ -9,8 +9,12 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+from django.conf import settings
+from django.conf.urls.static import static
+from django.contrib import admin
+from django.urls import path, include
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -132,3 +136,8 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'  # For testing,
 # settings.py
 
 LOGIN_URL = 'login/'  # Redirect to your custom login view
+
+
+MEDIA_ROOT = os.path.join(BASE_DIR, 'server')
+MEDIA_URL = '/media/'
+

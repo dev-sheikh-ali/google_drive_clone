@@ -1,9 +1,8 @@
-<!-- folder_management/templates/folder_management/list_folders.html -->
 {% extends "home.html" %}
 
 {% block content %}
 <div class="container mt-5">
-    <h2 class="text-center">Folders</h2>
+    <h2 class="text-center">Folders and Files</h2>
 
     <!-- Breadcrumb navigation -->
     <nav aria-label="breadcrumb">
@@ -32,19 +31,41 @@
                 <div class="folder-card text-center">
                     <i class="fas fa-folder fa-3x"></i>
                     <h5>{{ folder.name }}</h5>
-                    <div class="mt-2">
-                        <a class="btn btn-primary btn-sm" href="{% url 'list_folders_nested' folder.id %}">Open</a>
-                        <button class="btn btn-info btn-sm" data-toggle="modal" data-target="#moveFolderModal{{ folder.id }}">Move</button>
-                        <button class="btn btn-secondary btn-sm" data-toggle="modal" data-target="#copyFolderModal{{ folder.id }}">Copy</button>
-                        <button class="btn btn-danger btn-sm" data-toggle="modal" data-target="#deleteFolderModal{{ folder.id }}">Delete</button>
-                    </div>
+                    <a class="btn btn-primary btn-sm" href="{% url 'list_folders_nested' folder.id %}">Open</a>
                 </div>
             </div>
-            <!-- Include move, copy, delete modals -->
-            {% include "folder_management/move_folder_modal.html" %}
-            {% include "folder_management/copy_folder_modal.html" %}
-            {% include "folder_management/delete_folder_modal.html" %}
+        {% empty %}
+            <p class="text-center">No folders available in this directory.</p>
         {% endfor %}
+    </div>
+
+    <!-- File List -->
+    <div class="row mt-5">
+        <h4>Files in {{ parent_folder.name|default:"Root" }}</h4>
+        <div class="d-flex flex-wrap">
+            {% for file in files %}
+            <div class="file-card text-center me-3 mb-3">
+                <a href="{{ file.file.url }}" target="_blank">
+                    {% if file.extension == '.png' or file.extension == '.jpg' or file.extension == '.jpeg' %}
+                        <i class="fas fa-file-image file-icon fa-3x"></i>
+                    {% elif file.extension == '.pdf' %}
+                        <i class="fas fa-file-pdf file-icon fa-3x"></i>
+                    {% elif file.extension == '.doc' or file.extension == '.docx' %}
+                        <i class="fas fa-file-word file-icon fa-3x"></i>
+                    {% elif file.extension == '.txt' %}
+                        <i class="fas fa-file-alt file-icon fa-3x"></i>
+                    {% else %}
+                        <i class="fas fa-file file-icon fa-3x"></i>
+                    {% endif %}
+                    <h5 class="card-title">{{ file.name }}</h5>
+                </a>
+                <p>Size: {{ file.size }} bytes</p>
+                <p>Last modified: {{ file.updated_at }}</p>
+            </div>
+            {% empty %}
+            <p class="text-center">No files available in this folder.</p>
+            {% endfor %}
+        </div>
     </div>
 </div>
 

@@ -3,11 +3,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 from .models import Folder
 from django.http import JsonResponse
+from file_management.models import File
 
 @login_required
 def list_folders(request, parent_id=None):
     """
-    List folders under a given parent folder. If no parent_id is provided, list root folders.
+    List folders and files under a given parent folder. If no parent_id is provided, list root folders and files.
     """
     parent_folder = None
     if parent_id:
@@ -15,6 +16,10 @@ def list_folders(request, parent_id=None):
 
     # Get subfolders of the current folder (or root folders if no parent_folder)
     folders = Folder.objects.filter(owner=request.user, parent=parent_folder)
+    files = File.objects.filter(owner=request.user, parent_folder=parent_folder)  # Fetch files in the current folder
+
+    print("Folders count:", folders.count())  # For debugging in console
+    print("Files count:", files.count())  # For debugging in console
 
     # Collect ancestors for breadcrumb navigation
     breadcrumbs = []
@@ -25,6 +30,7 @@ def list_folders(request, parent_id=None):
 
     context = {
         'folders': folders,
+        'files': files,  # Pass files to template
         'parent_folder': parent_folder,
         'breadcrumbs': breadcrumbs,
     }

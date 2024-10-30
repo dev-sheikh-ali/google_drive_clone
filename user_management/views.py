@@ -7,14 +7,17 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 from django.http import JsonResponse
 from folder_management.models import Folder
-import re
+from file_management.models import File
+
+import logging
+
+logger = logging.getLogger(__name__)
 
 @login_required
 def home(request):
-    # Retrieve folders owned by the user
+    logger.info("Rendering home view")
     folders = Folder.objects.filter(owner=request.user)
-    files = []  # Placeholder for file retrieval logic
-
+    files = File.objects.filter(owner=request.user)
     return render(request, 'home.html', {'folders': folders, 'files': files})
 
 def signup(request):
