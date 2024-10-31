@@ -60,28 +60,7 @@ body {
     flex: 1;
 }
 
-.recently-opened {
-    width: 300px;
-}
-
-.profile-popup {
-    display: none;
-    position: absolute;
-    top: 50px;
-    right: 50px;
-    background-color: white;
-    border: 1px solid #ccc;
-    padding: 10px;
-    z-index: 1000;
-    width: 200px;
-}
-
-.dark-mode .profile-popup {
-    background-color: #1e1e1e;
-    border: 1px solid #444;
-}
-
-.folder-card {
+.folder-card, .file-card {
     padding: 15px;
     border-radius: 10px;
     transition: transform 0.2s;
@@ -91,50 +70,60 @@ body {
     width: 150px;
 }
 
-.folder-card:hover {
+.folder-card:hover, .file-card:hover {
     transform: scale(1.05);
 }
 
-.folder-actions {
+.folder-actions, .file-actions {
     position: absolute;
     top: 15px;
     right: 15px;
 }
 
-.folder-icon {
+.folder-icon, .file-icon {
     font-size: 2.5rem;
 }
 
-.recent-file {
-    margin-bottom: 15px;
-    display: flex;
-    justify-content: space-between;
-    padding: 10px;
-    background-color: #ffffff;
-    border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-}
-
+/* Updates to the File Card to improve display and hover interaction */
 .file-card {
     padding: 15px;
     border-radius: 10px;
-    transition: transform 0.2s;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
     background-color: #e9ecef;
     position: relative;
-    width: 150px;
+    width: 180px;
+    transition: transform 0.2s;
 }
 
 .file-card:hover {
     transform: scale(1.05);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.3);
 }
 
-.file-actions {
-    position: absolute;
-    top: 15px;
-    right: 15px;
+/* Metadata styling: always display filename and size, reveal more on hover */
+.file-metadata {
+    font-size: 0.9rem;
+    color: #555;
+    transition: opacity 0.3s;
+    opacity: 0;
+    overflow: hidden;
+    height: 0;
 }
 
-.file-icon {
-    font-size: 2.5rem;
+.file-card:hover .file-metadata {
+    opacity: 1;
+    height: auto;
 }
+
+/* Title and size are always visible */
+.card-title,
+.file-size {
+    margin: 0;
+    font-size: 1rem;
+}
+
+/* Adjust units display for better readability */
+.file-size::after {
+    content: attr(data-size);
+}
+

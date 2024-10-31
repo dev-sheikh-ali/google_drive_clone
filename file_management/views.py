@@ -1,5 +1,5 @@
 # file_management/views.py
-
+from django.http import FileResponse, Http404
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
@@ -26,6 +26,7 @@ def upload_file(request, parent_id=None):
             file.parent_folder = parent_folder
             file.size = file.file.size
             file.extension = os.path.splitext(file.file.name)[1].lower()
+            file.name = file.file.name  # Set the file name here
             file.save()
             return JsonResponse({"message": "File uploaded successfully!", "file_name": file.name}, status=200)
         else:
@@ -110,3 +111,30 @@ def list_files(request, parent_id=None):
         'breadcrumbs': breadcrumbs,
     }
     return render(request, 'folder_management/list_folders.html', context)
+
+
+
+@login_required
+def download_file(request, file_id):
+    try:
+        # Retrieve the file object that belongs to the requesting user
+        file = get_object_or_404(File, id=file_id, owner=request.user)
+
+        # Construct the path to the file
+        file_path = file.file.path
+
+        # Ensure the file exists on the server
+        if not os.path.exists(file_path):
+            raise FileNotFoundError
+
+        # Prepare and return the response to serve the file
+        response = FileResponse(open(file_path, 'rb'), as_attachment=True)
+        response['Content-Disposition'] = f'attachment; filename="{file.name}"'
+        return response
+
+    except File.DoesNotExist:
+        return JsonResponse({"error": "File does not exist"}, status=404)
+    except FileNotFoundError:
+        return JsonResponse({"error": "The file was not found on the server"}, status=404)
+    except Exception as e:
+        return JsonResponse({"error": f"An unexpected error occurred: {str(e)}"}, status=500)

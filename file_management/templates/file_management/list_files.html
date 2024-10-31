@@ -8,8 +8,8 @@
     </h4>
     <div class="d-flex flex-wrap file-list-container">
         {% for file in files %}
-        <div class="file-card text-center me-3 mb-3">
-            <a href="{{ file.file.url }}" target="_blank">
+        <div class="file-card text-center me-3 mb-3" style="width: 200px; padding: 15px; border-radius: 10px; background-color: #f8f9fa; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: transform 0.2s;">
+            <a href="{{ file.file.url }}" target="_blank" class="file-link" style="text-decoration: none;">
                 {% if file.extension == '.png' or file.extension == '.jpg' or file.extension == '.jpeg' %}
                     <i class="fas fa-file-image file-icon fa-3x"></i>
                 {% elif file.extension == '.pdf' %}
@@ -21,17 +21,19 @@
                 {% else %}
                     <i class="fas fa-file file-icon fa-3x"></i>
                 {% endif %}
-                <h5 class="card-title">{{ file.name }}</h5>
             </a>
-            <p>Size: {{ file.size }} bytes</p>
-            <p>Last modified: {{ file.updated_at }}</p>
+            <h6 class="card-title mt-2">{{ file.name }}</h6> <!-- File name always visible -->
+            <p class="file-size">Size: {{ file.size|filesizeformat }}</p> <!-- More readable file size -->
+            <div class="file-metadata mt-2" style="display: none;">
+                <p>Last modified: {{ file.updated_at|date:"F j, Y, g:i a" }}</p>
+            </div>
 
             <!-- Three-dots dropdown -->
-            <div class="dropdown file-actions">
+            <div class="dropdown file-actions mt-2">
                 <button class="btn btn-light dropdown-toggle" type="button" id="fileActions{{ file.id }}" data-bs-toggle="dropdown" aria-expanded="false">
                     <i class="fas fa-ellipsis-v"></i>
                 </button>
-                <ul class="dropdown-menu" aria-labelledby="fileActions{{ file.id }}">
+                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="fileActions{{ file.id }}">
                     <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteFileModal{{ file.id }}">Delete</a></li>
                     <li><a class="dropdown-item" href="#">Copy</a></li>
                     <li><a class="dropdown-item" href="#">Move</a></li>
