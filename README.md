@@ -32,8 +32,78 @@
 - **Django-Jazzmin:** template for django admin `https://django-jazzmin.readthedocs.io/`
 
 ## Project Structure
-```
 
+```
+user@user:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ tree -I "env|venv|server|__pycache__|migrations|images"
+.
+├── db.sqlite3
+├── file_management
+│   ├── admin.py
+│   ├── apps.py
+│   ├── forms.py
+│   ├── __init__.py
+│   ├── models.py
+│   ├── templates
+│   │   └── file_management
+│   │       ├── delete_file_modal.html
+│   │       ├── list_files.html
+│   │       └── upload_file_modal.html
+│   ├── templatetags
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── folder_management
+│   ├── admin.py
+│   ├── apps.py
+│   ├── __init__.py
+│   ├── models.py
+│   ├── templates
+│   │   └── folder_management
+│   │       ├── copy_folder_modal.html
+│   │       ├── create_folder_modal.html
+│   │       ├── create_subfolder_modal.html
+│   │       ├── delete_folder_modal.html
+│   │       ├── edit_folder_modal.html
+│   │       ├── list_folders.html
+│   │       └── move_folder_modal.html
+│   ├── templatetags
+│   │   ├── folder_tags.py
+│   │   └── __init__.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
+├── google_drive_clone
+│   ├── asgi.py
+│   ├── __init__.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+├── manage.py
+├── README.md
+├── requirements.txt
+└── user_management
+    ├── admin.py
+    ├── apps.py
+    ├── forms.py
+    ├── __init__.py
+    ├── models.py
+    ├── templates
+    │   ├── home.css
+    │   ├── home.html
+    │   └── user_management
+    │       ├── login.html
+    │       ├── password_reset_complete.html
+    │       ├── password_reset_confirm.html
+    │       ├── password_reset_done.html
+    │       ├── password_reset_form.html
+    │       ├── profile.html
+    │       └── signup.html
+    ├── tests.py
+    ├── urls.py
+    └── views.py
+
+12 directories, 53 files
+user@user:~/Documents/JUNIA 2024/python course/Django_Projects/google_drive_clone$ 
     
 ```
 
