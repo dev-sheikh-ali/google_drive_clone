@@ -159,12 +159,36 @@ python manage.py runserver
 ### Step 9: Access the application
 Open your browser and go to `http://127.0.0.1:8000/signup` to create a new account or `http://127.0.0.1:8000/login` to log in.
 
-## Features
-- Authentication and account creation with login and password
-- Browse folders on a web UI
-- Create , edit , delete , copy and move folders
-- Dark and light mode toggle
-- Profile management
+##  Implemented Features
+- create folders 
+- create sublfolders 
+- breadcrump for folders 
+- edit folder name
+- delete folder 
+- creat users -admin side
+- edit users details - both admin and client side 
+- register , login and logout --sessions 
+- reset password (local)
+- listing files and folders and subfolders appropriately 
+- browse files and folders
+- Display file properties and file metadata
+- upload file 
+- delete files
+- Each account has a drive limit of 100 MB (his folder on the server cannot exceed 100 MB)
+- The max upload size is 40 MB (a file greater than 40MB cannot be uploaded)
+
+
+## Features To Implement
+
+- Recent files --easy
+- copy and move folders *
+- copy and move files   *
+- Trash functionality   *
+- favourites / starred files
+- file sharinng         *
+- displaying stats - memory usage  --easy
+- search 
+
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.

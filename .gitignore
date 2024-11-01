@@ -1,5 +1,6 @@
-# Ignore server directory
+# Ignore server directory and DB
 /server/
+
 
 # Ignore Python cache files
 __pycache__/
@@ -15,6 +16,7 @@ env/
 
 # Ignore database files
 *.sqlite3
+*.db.sqlite3
 
 # Ignore compiled code
 *.pyc
