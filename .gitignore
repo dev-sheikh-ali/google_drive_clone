@@ -19,8 +19,9 @@ env/
 *.db.sqlite3
 
 # Ignore compiled code
-*.pyc
 *.pyo
+*.pyc
+
 
 # Ignore editor files (optional)
 .vscode/
