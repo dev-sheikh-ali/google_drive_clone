@@ -10,17 +10,8 @@
         {% for file in files %}
         <div class="file-card text-center me-3 mb-3" style="width: 200px; padding: 15px; border-radius: 10px; background-color: #f8f9fa; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: transform 0.2s;">
             <a href="{{ file.file.url }}" target="_blank" class="file-link" style="text-decoration: none;">
-                {% if file.extension == '.png' or file.extension == '.jpg' or file.extension == '.jpeg' %}
-                    <i class="fas fa-file-image file-icon fa-3x"></i>
-                {% elif file.extension == '.pdf' %}
-                    <i class="fas fa-file-pdf file-icon fa-3x"></i>
-                {% elif file.extension == '.doc' or file.extension == '.docx' %}
-                    <i class="fas fa-file-word file-icon fa-3x"></i>
-                {% elif file.extension == '.txt' %}
-                    <i class="fas fa-file-alt file-icon fa-3x"></i>
-                {% else %}
-                    <i class="fas fa-file file-icon fa-3x"></i>
-                {% endif %}
+                <!-- Use the custom file_icon filter -->
+                <i class="{{ file.extension|file_icon }} file-icon fa-3x"></i>
             </a>
             <h6 class="card-title mt-2">{{ file.name }}</h6> <!-- File name always visible -->
             <p class="file-size">Size: {{ file.size|filesizeformat }}</p> <!-- More readable file size -->
