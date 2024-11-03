@@ -124,7 +124,8 @@
             <div class="file-card text-center" data-file-id="{{ file.id }}" data-size-bytes="{{ file.size }}">
                 <div class="file-link">
                     <!-- Use the custom file_icon filter -->
-                    <i class="{{ file.extension|file_icon }} file-icon fa-3x"></i>
+                    <i class="{{ file.extension|file_icon }} file-icon fa-3x" style="color: #007bff;"></i>
+
                     <h5 class="card-title">{{ file.name }}</h5>
                     <p class="file-size">Size: {{ file.size|filesizeformat }}</p>
                 </div>
