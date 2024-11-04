@@ -17,12 +17,12 @@
                 <li class="breadcrumb-item"><a href="{% url 'list_folders_nested' breadcrumb.id %}">{{ breadcrumb.name }}</a></li>
             {% endfor %}
         </ol>
+        <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal">+ Upload File</button>
     </nav>
 
     <!-- Folder Listing -->
     <div class="row">
         <div class="d-flex mb-3">
-            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal">+ Upload File</button>
             <h4 class="my-auto">Your Folders</h4>
         </div>
         <div class="d-flex flex-wrap">
