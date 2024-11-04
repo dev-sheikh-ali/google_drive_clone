@@ -34,7 +34,7 @@ def list_folders(request, parent_id=None):
         'parent_folder': parent_folder,
         'breadcrumbs': breadcrumbs,
     }
-    return render(request, 'folder_management/list_folders.html', context)
+    return render(request, 'file_management/list_files.html', context) 
 
 @login_required
 def create_folder(request, parent_id=None):

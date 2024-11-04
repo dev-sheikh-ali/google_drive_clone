@@ -58,6 +58,9 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = 'google_drive_clone.urls'
+# settings.py
+
+USER_MAX_STORAGE = 100 * 1024 * 1024  # 100 MB
 
 TEMPLATES = [
     {
@@ -70,6 +73,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'file_management.context_processors.storage_stats',
             ],
         },
     },

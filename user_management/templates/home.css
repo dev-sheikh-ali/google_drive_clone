@@ -127,3 +127,11 @@ body {
     content: attr(data-size);
 }
 
+
+.content-wrapper {
+    padding: 20px;
+}
+
+.progress-bar {
+    background-color: #007bff;
+}

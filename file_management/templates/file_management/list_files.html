@@ -1,42 +1,91 @@
-<div class="row mt-5">
-    <h4>Files in 
-        {% if parent_folder %}
-            {{ parent_folder.name }}
-        {% else %}
-            Root
-        {% endif %}
-    </h4>
-    <div class="d-flex flex-wrap file-list-container">
-        {% for file in files %}
-        <div class="file-card text-center me-3 mb-3" style="width: 200px; padding: 15px; border-radius: 10px; background-color: #f8f9fa; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); transition: transform 0.2s;">
-            <a href="{{ file.file.url }}" target="_blank" class="file-link" style="text-decoration: none;">
-                <!-- Use the custom file_icon filter -->
-                <i class="{{ file.extension|file_icon }} file-icon fa-3x"></i>
-            </a>
-            <h6 class="card-title mt-2">{{ file.name }}</h6> <!-- File name always visible -->
-            <p class="file-size">Size: {{ file.size|filesizeformat }}</p> <!-- More readable file size -->
-            <div class="file-metadata mt-2" style="display: none;">
-                <p>Last modified: {{ file.updated_at|date:"F j, Y, g:i a" }}</p>
-            </div>
+{% extends "home.html" %}
+{% load file_extras %}
+{% block content %}
+<div class="container-fluid">
+    <h2>Welcome to Your Drive</h2>
 
-            <!-- Three-dots dropdown -->
-            <div class="dropdown file-actions mt-2">
-                <button class="btn btn-light dropdown-toggle" type="button" id="fileActions{{ file.id }}" data-bs-toggle="dropdown" aria-expanded="false">
-                    <i class="fas fa-ellipsis-v"></i>
-                </button>
-                <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="fileActions{{ file.id }}">
-                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteFileModal{{ file.id }}">Delete</a></li>
-                    <li><a class="dropdown-item" href="#">Copy</a></li>
-                    <li><a class="dropdown-item" href="#">Move</a></li>
-                </ul>
-            </div>
+    <!-- Search bar -->
+    <div class="search-bar mb-3">
+        <input type="text" class="form-control" placeholder="Search files and folders..." aria-label="Search">
+    </div>
+
+    <!-- Breadcrumb Navigation -->
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="{% url 'list_folders' %}"><i class="fas fa-home"></i> Home</a></li>
+            {% for breadcrumb in breadcrumbs %}
+                <li class="breadcrumb-item"><a href="{% url 'list_folders_nested' breadcrumb.id %}">{{ breadcrumb.name }}</a></li>
+            {% endfor %}
+        </ol>
+    </nav>
+
+    <!-- Folder Listing -->
+    <div class="row">
+        <div class="d-flex mb-3">
+            <button class="btn btn-primary me-2" data-bs-toggle="modal" data-bs-target="#uploadFileModal">+ Upload File</button>
+            <h4 class="my-auto">Your Folders</h4>
         </div>
+        <div class="d-flex flex-wrap">
+            {% for folder in folders %}
+                <div class="folder-card text-center me-3 mb-3">
+                    <a href="{% url 'list_folders_nested' folder.id %}" class="folder-link">
+                        <i class="fas fa-folder folder-icon"></i>
+                        <h5 class="card-title">{{ folder.name }}</h5>
+                    </a>
+                    <div class="folder-actions dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="folderActions{{ folder.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="folderActions{{ folder.id }}">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#editFolderModal{{ folder.id }}">Edit</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteFolderModal{{ folder.id }}">Delete</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#moveFolderModal{{ folder.id }}">Move</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#copyFolderModal{{ folder.id }}">Copy</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#createSubFolderModal{{ folder.id }}">Create Subfolder</a></li>
+                        </ul>
+                    </div>
+                </div>
+                {% include "folder_management/edit_folder_modal.html" %}
+                {% include "folder_management/delete_folder_modal.html" %}
+                {% include "folder_management/move_folder_modal.html" %}
+                {% include "folder_management/copy_folder_modal.html" %}
+                {% include "folder_management/create_subfolder_modal.html" %}
+            {% endfor %}
+        </div>
+    </div>
 
-        <!-- Include delete modal for each file -->
-        {% include "file_management/delete_file_modal.html" with file=file %}
-        
-        {% empty %}
-        <p>No files available in this folder.</p>
-        {% endfor %}
+    <!-- File Listing -->
+    <div class="row mt-5">
+        <h4 class="mb-3">Your Files</h4>
+        <div class="d-flex flex-wrap">
+            {% for file in files %}
+            <div class="file-card-container me-3 mb-3">
+                <div class="file-card text-center" data-file-id="{{ file.id }}" data-size-bytes="{{ file.size }}">
+                    <div class="file-link">
+                        <i class="{{ file.extension|file_icon }} file-icon fa-3x" style="color: #007bff;"></i>
+                        <h5 class="card-title">{{ file.name }}</h5>
+                        <p class="file-size">Size: {{ file.size|filesizeformat }}</p>
+                    </div>
+                    <div class="file-metadata" style="display: none;">
+                        <p>Last modified: {{ file.updated_at|date:"F j, Y, g:i a" }}</p>
+                        <p>Type: {{ file.extension }}</p>
+                    </div>
+                    <div class="file-actions dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="fileActions{{ file.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="fileActions{{ file.id }}">
+                            <li><a class="dropdown-item download-file" data-file-id="{{ file.id }}" href="#">Download</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteFileModal{{ file.id }}">Delete</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#moveFileModal{{ file.id }}">Move</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#copyFileModal{{ file.id }}">Copy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% include "file_management/delete_file_modal.html" with file=file %}
+            {% endfor %}
+        </div>
     </div>
 </div>
+{% endblock %}

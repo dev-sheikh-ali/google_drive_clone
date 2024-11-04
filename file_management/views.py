@@ -7,10 +7,47 @@ from django.http import JsonResponse
 from .models import File
 from folder_management.models import Folder
 from .forms import FileUploadForm
+from django.db import models
 import os
+from django.db.models import Sum
+from django.conf import settings
 
 MAX_FILE_SIZE = 40 * 1024 * 1024  # 40 MB
 USER_MAX_STORAGE = 100 * 1024 * 1024  # 100 MB
+
+
+
+@login_required
+def dashboard(request):
+    # Get all files and folders for the user
+    total_files = File.objects.filter(owner=request.user).count()
+    total_folders = Folder.objects.filter(owner=request.user).count()
+
+    # Calculate used storage
+    used_storage = File.objects.filter(owner=request.user).aggregate(total_size=Sum('size'))['total_size'] or 0
+    max_storage = settings.USER_MAX_STORAGE
+    used_percentage = (used_storage / max_storage) * 100 if max_storage > 0 else 0
+
+    # Folder storage usage
+    folders = Folder.objects.filter(owner=request.user)
+    folder_names = []
+    folder_sizes = []
+
+    for folder in folders:
+        folder_size = File.objects.filter(owner=request.user, parent_folder=folder).aggregate(total_size=Sum('size'))['total_size'] or 0
+        folder_names.append(folder.name)
+        folder_sizes.append(folder_size / (1024 * 1024))  # Convert to MB
+
+    context = {
+        'total_files': total_files,
+        'total_folders': total_folders,
+        'used_storage': used_storage,
+        'max_storage': max_storage,
+        'used_percentage': used_percentage,
+        'folder_names': folder_names,
+        'folder_sizes': folder_sizes,
+    }
+    return render(request, 'file_management/dashboard.html', context)
 
 @login_required
 def upload_file(request, parent_id=None):

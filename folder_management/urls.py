@@ -3,7 +3,7 @@ from django.urls import path
 from . import views
 
 urlpatterns = [
-    path('', views.list_folders, name='list_folders'),
+    path('MyFiles', views.list_folders, name='list_folders'),
     path('<int:parent_id>/', views.list_folders, name='list_folders_nested'),
     path('create/', views.create_folder, name='create_folder'),
     path('<int:parent_id>/create/', views.create_folder, name='create_folder_nested'),

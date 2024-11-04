@@ -1,0 +1,93 @@
+{% extends "home.html" %}
+
+{% block content %}
+<div class="container" style="margin-top: 3rem;">
+    <h2>Dashboard</h2>
+
+    <!-- Row for Storage Usage Summary -->
+    <div class="row" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="col-md-6">
+            <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                <div class="card-body" style="padding: 1rem;">
+                    <h5 class="card-title" style="margin-bottom: 1rem;">Storage Usage</h5>
+                    <p>{{ used_storage|filesizeformat }} of {{ max_storage|filesizeformat }} used ({{ used_percentage|floatformat:2 }}%)</p>
+                    <div class="progress" style="height: 20px;">
+                        <div class="progress-bar" role="progressbar" style="width: {{ used_percentage }}%; background-color: #4CAF50;" aria-valuenow="{{ used_percentage }}" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
+                <div class="card-body" style="padding: 1rem;">
+                    <h5 class="card-title" style="margin-bottom: 1rem;">Total Files and Folders</h5>
+                    <p>Files: {{ total_files }}</p>
+                    <p>Folders: {{ total_folders }}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Row for Pie Chart and Bar Chart -->
+    <div class="row" style="margin-top: 1.5rem; margin-bottom: 1.5rem;">
+        <div class="col-md-6">
+            <h5 style="text-align: center; margin-bottom: 1rem;">Storage Distribution</h5>
+            <canvas id="storagePieChart" style="max-width: 100%; height: auto;"></canvas>
+        </div>
+        <div class="col-md-6">
+            <h5 style="text-align: center; margin-bottom: 1rem;">Folder Storage Usage</h5>
+            <canvas id="folderBarChart" style="max-width: 100%; height: auto;"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Pie Chart for Storage Distribution
+    const storagePieCtx = document.getElementById('storagePieChart').getContext('2d');
+    const usedStorage = {{ used_storage }};
+    const availableStorage = {{ max_storage }} - usedStorage;
+    new Chart(storagePieCtx, {
+        type: 'pie',
+        data: {
+            labels: ['Used', 'Available'],
+            datasets: [{
+                data: [usedStorage, availableStorage],
+                backgroundColor: ['#ff6384', '#36a2eb']
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                }
+            }
+        }
+    });
+
+    // Bar Chart for Folder Storage Usage
+    const folderBarCtx = document.getElementById('folderBarChart').getContext('2d');
+    const folderNames = {{ folder_names|safe }};  // List of folder names from the context
+    const folderSizes = {{ folder_sizes|safe }};  // Corresponding sizes for each folder
+    new Chart(folderBarCtx, {
+        type: 'bar',
+        data: {
+            labels: folderNames,
+            datasets: [{
+                label: 'Folder Size (MB)',
+                data: folderSizes,
+                backgroundColor: '#36a2eb'
+            }]
+        },
+        options: {
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}
