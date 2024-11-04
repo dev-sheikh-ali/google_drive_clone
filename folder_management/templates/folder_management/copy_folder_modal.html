@@ -1,9 +1,10 @@
+<!-- folder_management/templates/folder_management/copy_folder_modal.html -->
 {% load folder_tags %}
 <div class="modal fade" id="copyFolderModal{{ folder.id }}" tabindex="-1" aria-labelledby="copyFolderModalLabel{{ folder.id }}" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="copyFolderModalLabel{{ folder.id }}">Copy Folder</h5>
+                <h5 class="modal-title" id="copyFolderModalLabel{{ folder.id }}">Copy Folder: {{ folder.name }}</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
@@ -12,6 +13,7 @@
                     <div class="form-group">
                         <label for="newParentId">Select Destination Folder</label>
                         <select class="form-control" name="new_parent_id" required>
+                            <option value="" disabled selected>Select a folder</option>
                             {% for target_folder in all_folders %}
                                 {% if not folder|is_descendant:target_folder and folder.id != target_folder.id %}
                                     <option value="{{ target_folder.id }}">{{ target_folder.get_full_path }}</option>

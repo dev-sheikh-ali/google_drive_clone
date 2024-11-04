@@ -1,3 +1,4 @@
+# folder_management/urls.py
 
 from django.urls import path
 from . import views
@@ -10,5 +11,6 @@ urlpatterns = [
     path('<int:folder_id>/update/', views.update_folder, name='update_folder'),
     path('<int:folder_id>/delete/', views.delete_folder, name='delete_folder'),
     path('<int:folder_id>/move/', views.move_folder, name='move_folder'),
-    path('<int:folder_id>/copy/', views.copy_folder, name='copy_folder'),
+    path('<int:folder_id>/copy/', views.copy_folder, name='copy_folder'),  
+    
 ]

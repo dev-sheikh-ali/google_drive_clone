@@ -6,9 +6,6 @@ register = template.Library()
 
 @register.filter
 def is_descendant(folder, potential_ancestor):
-    """
-    Custom template filter to check if 'folder' is a descendant of 'potential_ancestor'.
-    """
     if not isinstance(folder, Folder) or not isinstance(potential_ancestor, Folder):
         return False
 

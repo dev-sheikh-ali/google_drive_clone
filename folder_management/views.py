@@ -5,6 +5,7 @@ from .models import Folder
 from django.http import JsonResponse
 from file_management.models import File
 
+
 @login_required
 def list_folders(request, parent_id=None):
     """
@@ -18,9 +19,6 @@ def list_folders(request, parent_id=None):
     folders = Folder.objects.filter(owner=request.user, parent=parent_folder)
     files = File.objects.filter(owner=request.user, parent_folder=parent_folder)  # Fetch files in the current folder
 
-    print("Folders count:", folders.count())  # For debugging in console
-    print("Files count:", files.count())  # For debugging in console
-
     # Collect ancestors for breadcrumb navigation
     breadcrumbs = []
     current = parent_folder
@@ -33,6 +31,7 @@ def list_folders(request, parent_id=None):
         'files': files,  # Pass files to template
         'parent_folder': parent_folder,
         'breadcrumbs': breadcrumbs,
+        'all_folders': Folder.objects.filter(owner=request.user),  # Pass all folders for modal
     }
     return render(request, 'file_management/list_files.html', context) 
 
@@ -63,9 +62,6 @@ def create_folder(request, parent_id=None):
 
 @login_required
 def create_subfolder(request, parent_id):
-    """
-    Create a subfolder within the specified parent folder.
-    """
     parent_folder = get_object_or_404(Folder, id=parent_id, owner=request.user)
     if request.method == 'POST':
         name = request.POST.get('name')
@@ -109,12 +105,10 @@ def update_folder(request, folder_id):
         folder.save()
         messages.success(request, "Folder updated successfully!")
 
-        # Redirect to the correct parent folder or root
         if folder.parent:
             return redirect('list_folders_nested', parent_id=folder.parent.id)
         return redirect('list_folders')
 
-    # Redirect to the correct parent folder or root if GET request
     if folder.parent:
         return redirect('list_folders_nested', parent_id=folder.parent.id)
     return redirect('list_folders')
@@ -143,23 +137,23 @@ def move_folder(request, folder_id):
 
             # Ensure the selected new parent is not a descendant of the folder being moved
             if not is_child_folder(folder, new_parent):
-                # Check for duplicate names and append numbers if needed
-                original_name = folder.name
-                counter = 1
-                name = original_name
-                while Folder.objects.filter(name=name, owner=request.user, parent=new_parent).exists():
-                    name = f"{original_name} ({counter})"
-                    counter += 1
-                folder.name = name
+                # Move the folder
                 folder.parent = new_parent
                 folder.save()
-                messages.success(request, "Folder moved successfully!")
+                
+                # Move all files in the original folder to the new parent
+                files_to_move = File.objects.filter(parent_folder=folder)
+                for file in files_to_move:
+                    file.parent_folder = None  # If you want to set the parent folder to the new folder, set it as follows:
+                    file.parent_folder = new_parent  # Update this line to move the files to the new parent folder
+                    file.save()
+
+                messages.success(request, "Folder and its contents moved successfully!")
             else:
                 messages.error(request, "Invalid operation. Cannot move a folder into its own child or itself.")
 
         return redirect('list_folders_nested', parent_id=new_parent_id)
 
-    # Retrieve all folders owned by the user except for the current folder and its descendants
     all_folders = Folder.objects.filter(owner=request.user).exclude(id=folder.id)
     valid_folders = [f for f in all_folders if not is_child_folder(folder, f)]
 
@@ -172,33 +166,40 @@ def move_folder(request, folder_id):
 @login_required
 def copy_folder(request, folder_id):
     folder = get_object_or_404(Folder, id=folder_id, owner=request.user)
+    
     if request.method == 'POST':
         new_parent_id = request.POST.get('new_parent_id')
         if new_parent_id:
             new_parent = get_object_or_404(Folder, id=new_parent_id, owner=request.user)
             if not is_child_folder(folder, new_parent):
                 # Check for duplicate names and append numbers if needed
-                original_name = f"{folder.name} - Copy"
+                original_name = folder.name
                 counter = 1
                 name = original_name
                 while Folder.objects.filter(name=name, owner=request.user, parent=new_parent).exists():
                     name = f"{original_name} ({counter})"
                     counter += 1
-                copied_folder = Folder(name=name, parent=new_parent, owner=request.user)
+                
+                # Create a copy of the folder
+                copied_folder = Folder(name=name, owner=request.user, parent=new_parent)
                 copied_folder.save()
+                
+                # Copy all files in the original folder
+                files_to_copy = File.objects.filter(parent_folder=folder)
+                for file in files_to_copy:
+                    file_copy = File(
+                        name=file.name,
+                        file=file.file,  # This will create a new file in MEDIA_ROOT
+                        owner=request.user,
+                        parent_folder=copied_folder,
+                        size=file.size,
+                        extension=file.extension
+                    )
+                    file_copy.save()
+
                 messages.success(request, "Folder copied successfully!")
             else:
                 messages.error(request, "Invalid copy operation. You cannot copy a folder into its child.")
-        else:
-            original_name = f"{folder.name} - Copy"
-            counter = 1
-            name = original_name
-            while Folder.objects.filter(name=name, owner=request.user, parent=None).exists():
-                name = f"{original_name} ({counter})"
-                counter += 1
-            copied_folder = Folder(name=name, owner=request.user)
-            copied_folder.save()
-            messages.success(request, "Folder copied to the root successfully!")
 
         return redirect('list_folders_nested', parent_id=new_parent_id if new_parent_id else None)
 

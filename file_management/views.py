@@ -27,13 +27,23 @@ def dashboard(request):
     max_storage = settings.USER_MAX_STORAGE
     used_percentage = (used_storage / max_storage) * 100 if max_storage > 0 else 0
 
-    # Folder storage usage (considering only root folders)
+    # Folder storage usage (considering root folders and their subfolders)
     folders = Folder.objects.filter(owner=request.user, parent=None)  # Get only root folders
     folder_names = []
     folder_sizes = []
 
+    def get_folder_size(folder):
+        """ Recursively calculate the total size of all files in a folder and its subfolders. """
+        total_size = File.objects.filter(owner=request.user, parent_folder=folder).aggregate(total_size=Sum('size'))['total_size'] or 0
+        subfolders = Folder.objects.filter(owner=request.user, parent=folder)
+
+        for subfolder in subfolders:
+            total_size += get_folder_size(subfolder)  # Add sizes of all subfolders recursively
+
+        return total_size
+
     for folder in folders:
-        folder_size = File.objects.filter(owner=request.user, parent_folder=folder).aggregate(total_size=Sum('size'))['total_size'] or 0
+        folder_size = get_folder_size(folder)  # Get the total size of the folder including subfolders
         folder_names.append(folder.name)
         folder_sizes.append(folder_size / (1024 * 1024))  # Convert to MB
 
@@ -47,7 +57,6 @@ def dashboard(request):
         'folder_sizes': folder_sizes,
     }
     return render(request, 'file_management/dashboard.html', context)
-
 @login_required
 def upload_file(request, parent_id=None):
     parent_folder = None
@@ -57,13 +66,29 @@ def upload_file(request, parent_id=None):
     if request.method == 'POST':
         form = FileUploadForm(request.POST, request.FILES)
         if form.is_valid():
+            uploaded_file = request.FILES['file']
+            file_size = uploaded_file.size  # Get the size of the uploaded file
+
+            # Check if the file exceeds the maximum upload size (40 MB)
+            if file_size > MAX_FILE_SIZE:
+                return JsonResponse({"error": "Upload failed: File exceeds maximum upload size of 40 MB."}, status=400)
+
+            # Calculate current storage usage
+            used_storage = File.objects.filter(owner=request.user).aggregate(total_size=Sum('size'))['total_size'] or 0
+
+            # Check if adding the new file exceeds the user’s max storage limit (100 MB)
+            if used_storage + file_size > settings.USER_MAX_STORAGE:
+                return JsonResponse({"error": "Upload failed: Exceeds maximum storage limit of 100 MB."}, status=400)
+
+            # Proceed to save the file if both checks are passed
             file = form.save(commit=False)
             file.owner = request.user
             file.parent_folder = parent_folder
-            file.size = file.file.size
-            file.extension = os.path.splitext(file.file.name)[1].lower()
-            file.name = file.file.name  # Set the file name here
+            file.size = file_size
+            file.extension = os.path.splitext(uploaded_file.name)[1].lower()
+            file.name = uploaded_file.name  # Set the file name here
             file.save()
+
             return JsonResponse({"message": "File uploaded successfully!", "file_name": file.name}, status=200)
         else:
             return JsonResponse({"error": "Invalid form submission"}, status=400)

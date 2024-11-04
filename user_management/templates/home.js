@@ -13,6 +13,12 @@ $(document).ready(function () {
     $('#uploadFileForm').on('submit', function (e) {
         e.preventDefault();
         var formData = new FormData(this);
+        var errorMessageDiv = $('#error-message'); // Select the error message div
+
+        // Clear previous error message
+        errorMessageDiv.hide();
+        errorMessageDiv.text('');
+
         $.ajax({
             type: 'POST',
             url: $(this).attr('action'),
@@ -21,14 +27,23 @@ $(document).ready(function () {
             contentType: false,
             success: function (response) {
                 $('#uploadFileModal').modal('hide');
-                alert(response.message);
+                alert(response.message); // Optionally, show a success message
                 location.reload();  // Refresh page to show uploaded file
             },
             error: function (xhr, status, error) {
+                // Handle the error response
                 console.error("XHR Error: ", xhr);
                 console.error("Status: ", status);
                 console.error("Error: ", error);
-                alert("An error occurred: " + (xhr.responseText || error));
+                
+                var errorResponse = JSON.parse(xhr.responseText);
+                if (errorResponse.error) {
+                    // Display the error message in the modal
+                    errorMessageDiv.text(errorResponse.error);
+                    errorMessageDiv.show(); // Show the error message
+                } else {
+                    alert("An unexpected error occurred. Please try again later.");
+                }
             }
         });
     });
