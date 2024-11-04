@@ -1,0 +1,39 @@
+{% extends "home.html" %}  <!-- Change this to your actual base template if needed -->
+{% load file_extras %}
+
+{% block content %}
+<div class="container">
+    <h2>Recent Files</h2>
+    <div class="row mt-3">
+        <h4 class="mb-3">Your Recent Files</h4>
+        <div class="d-flex flex-wrap">
+            {% for file in files %}
+            <div class="file-card-container me-3 mb-3">
+                <div class="file-card text-center" data-file-id="{{ file.id }}" data-size-bytes="{{ file.size }}">
+                    <div class="file-link">
+                        <i class="{{ file.extension|file_icon }} file-icon fa-3x" style="color: #007bff;"></i>
+                        <h5 class="card-title">{{ file.name }}</h5>
+                        <p class="file-size">Size: {{ file.size|filesizeformat }}</p>
+                    </div>
+                    <div class="file-metadata" style="display: none;">
+                        <p>Last modified: {{ file.updated_at|date:"F j, Y, g:i a" }}</p>
+                        <p>Type: {{ file.extension }}</p>
+                    </div>
+                    <div class="file-actions dropdown">
+                        <button class="btn btn-light dropdown-toggle" type="button" id="fileActions{{ file.id }}" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="fas fa-ellipsis-v"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="fileActions{{ file.id }}">
+                            <li><a class="dropdown-item download-file" data-file-id="{{ file.id }}" href="#">Download</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#deleteFileModal{{ file.id }}">Delete</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#moveFileModal{{ file.id }}">Move</a></li>
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#copyFileModal{{ file.id }}">Copy</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

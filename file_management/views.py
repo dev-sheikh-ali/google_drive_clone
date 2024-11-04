@@ -16,7 +16,6 @@ MAX_FILE_SIZE = 40 * 1024 * 1024  # 40 MB
 USER_MAX_STORAGE = 100 * 1024 * 1024  # 100 MB
 
 
-
 @login_required
 def dashboard(request):
     # Get all files and folders for the user
@@ -28,8 +27,8 @@ def dashboard(request):
     max_storage = settings.USER_MAX_STORAGE
     used_percentage = (used_storage / max_storage) * 100 if max_storage > 0 else 0
 
-    # Folder storage usage
-    folders = Folder.objects.filter(owner=request.user)
+    # Folder storage usage (considering only root folders)
+    folders = Folder.objects.filter(owner=request.user, parent=None)  # Get only root folders
     folder_names = []
     folder_sizes = []
 
@@ -150,7 +149,17 @@ def list_files(request, parent_id=None):
     return render(request, 'folder_management/list_folders.html', context)
 
 
+@login_required
+def list_recent_files(request):
+    # Fetch the 10 most recent files for the authenticated user
+    recent_files = File.objects.filter(owner=request.user).order_by('-created_at')[:10]
 
+    context = {
+        'files': recent_files,
+        'parent_folder': None,  # No parent folder needed for recent files
+        'breadcrumbs': [],  # No breadcrumbs for this section
+    }
+    return render(request, 'file_management/list_recent_files.html', context)
 @login_required
 def download_file(request, file_id):
     try:

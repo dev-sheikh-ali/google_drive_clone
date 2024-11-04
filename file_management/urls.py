@@ -7,5 +7,6 @@ urlpatterns = [
     path('delete/<int:file_id>/', views.delete_file, name='delete_file'),
     path('list/<int:parent_id>/', views.list_folders, name='list_folders'),
     path('download/<int:file_id>/', views.download_file, name='download_file'),
-    path('dashboard/', views.dashboard, name='dashboard'),  # Explicit path for dashboard, if needed
+    path('dashboard/', views.dashboard, name='dashboard'), 
+     path('recent/', views.list_recent_files, name='list_recent_files'),
 ]

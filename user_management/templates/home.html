@@ -44,7 +44,7 @@
     <button class="btn btn-success create-folder-btn" data-bs-toggle="modal" data-bs-target="#createFolderModal">+ Create Folder</button>
     <a href="{% url 'dashboard' %}"><i class="fas fa-home"></i> Home</a>
     <a href="{% url 'list_folders' %}"><i class="fas fa-folder"></i> My Files</a>
-    <a href="#"><i class="fas fa-clock"></i> Recent</a>
+    <a href="{% url 'list_recent_files' %}"><i class="fas fa-clock"></i> Recent</a>
     <a href="#"><i class="fas fa-star"></i> Starred</a>
     <a href="#"><i class="fas fa-users"></i> Shared with Me</a>
     <a href="#"><i class="fas fa-trash"></i> Trash</a>

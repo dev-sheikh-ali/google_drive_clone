@@ -17,14 +17,24 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card" style="box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);">
-                <div class="card-body" style="padding: 1rem;">
-                    <h5 class="card-title" style="margin-bottom: 1rem;">Total Files and Folders</h5>
-                    <p>Files: {{ total_files }}</p>
-                    <p>Folders: {{ total_folders }}</p>
+            <div class="card" style="box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15); border-radius: 10px; overflow: hidden;">
+                <div class="card-body" style="padding: 1.5rem; text-align: center;">
+                    <h5 class="card-title" style="margin-bottom: 1rem; font-size: 1.5rem; font-weight: bold; color: #333;">
+                        <i class="fas fa-folder-open" style="color: #4CAF50;"></i> Total Files and Folders
+                    </h5>
+                    <div style="margin: 1rem 0;">
+                        <p style="font-size: 1.25rem; color: #555;">
+                            <strong>Files:</strong> <span style="color: #4CAF50;">{{ total_files }}</span>
+                        </p>
+                        <p style="font-size: 1.25rem; color: #555;">
+                            <strong>Folders:</strong> <span style="color: #4CAF50;">{{ total_folders }}</span>
+                        </p>
+                    </div>
                 </div>
             </div>
         </div>
+        
+
     </div>
 
     <!-- Row for Pie Chart and Bar Chart -->
