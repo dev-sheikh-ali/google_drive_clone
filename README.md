@@ -159,36 +159,52 @@ python manage.py runserver
 ### Step 9: Access the application
 Open your browser and go to `http://127.0.0.1:8000/signup` to create a new account or `http://127.0.0.1:8000/login` to log in.
 
-##  Implemented Features
-- create folders 
-- create sublfolders 
-- breadcrump for folders 
-- edit folder name
-- delete folder 
-- creat users -admin side
-- edit users details - both admin and client side 
-- register , login and logout --sessions 
-- reset password (local)
-- listing files and folders and subfolders appropriately 
-- browse files and folders
-- Display file properties and file metadata
-- upload file 
-- delete files
-- Each account has a drive limit of 100 MB (his folder on the server cannot exceed 100 MB)
-- The max upload size is 40 MB (a file greater than 40MB cannot be uploaded)
 
 
-## Features To Implement
+### Features 
 
-- Recent files --easy
-- copy and move folders *
-- copy and move files   *
+The web application will provide the maximum of the following features:
+
+1. **Authentication and Account Management**
+   - [ ] Account creation with login and password
+   - [ ] User authentication for login/logout
+
+2. **File and Folder Management**
+   - [ ] Browse files and folders on a web UI
+   - [ ] Display file properties and metadata
+   - [ ] Upload files (max upload size: 40 MB)
+   - [ ] Create folders
+   - [ ] Move files and folders
+   - [ ] Copy files and folders
+
+3. **Account Storage Limitations**
+   - [ ] Drive limit of 100 MB per account
+   - [ ] Enforce maximum storage limit (no folder exceeding 100 MB)
+
+4. **Account Information and Statistics**
+   - [ ] Account info screen displaying statistics
+   - [ ] Space distribution per file format (images, documents, videos, etc.) using graphics
+
+5. **File Preview**
+   - [ ] Preview known formats (images, videos, PDFs, source code, documents, etc.)
+   - [ ] Open text, view images, play videos
+
+6. **Setup and Installation**
+   - [ ] Setup script to install requirements
+   - [ ] Demo data setup in SQLite
+
+7. **User Experience (UX)**
+   - [ ] Nice, beautiful, responsive UX
+   - [ ] Demo compatibility on laptop and smartphone
+
+
+
+
+## Features To Implement later
+- search feature
 - Trash functionality   *
 - favourites / starred files
 - file sharinng         *
-- displaying stats - memory usage  --easy
-- search 
-
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
